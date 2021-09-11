@@ -35,6 +35,9 @@ fn main() {
         }
     }
     println!("Finished finding primes, writing to file.");
-    let joined: String = primes.iter().map( |&prime| prime.to_string() + "\n").collect();
-    file.write(joined.as_bytes());
+    let joined: String = primes.iter().map(|&prime| prime.to_string() + "\n").collect();
+    match file.write(joined.as_bytes()) {
+        Err(why) => panic!("There was an error: `{:?}` writing to file!", why),
+        Ok(file) => file,
+    };
 }
