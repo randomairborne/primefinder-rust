@@ -3,17 +3,22 @@ use std::env;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
+use std::process;
 use std::time::Instant;
 
 fn main() {
     let mut primes: Vec<u128> = Vec::new();
-    let mut largest_number_wanted_input_vec: Vec<String> = env::args().collect();
+    let largest_number_wanted_input_vec: Vec<String> = env::args().collect();
     if largest_number_wanted_input_vec.len() != 2 {
-        largest_number_wanted_input_vec.push(1000000.to_string())
+        eprintln!("No largest number wanted found. Usage: `primes.exe 1000`");
+        process::exit(21)
     }
     let largest_number_wanted_input_string = &largest_number_wanted_input_vec[1];
     let largest_number_wanted: u128 = match largest_number_wanted_input_string.parse() {
-        Err(_err) => 100,
+        Err(err) => {
+            eprintln!("Could not parse input as integer `{:?}`", err);
+            process::exit(20)
+        }
         Ok(result) => result,
     };
     let path = Path::new("primes.txt");
