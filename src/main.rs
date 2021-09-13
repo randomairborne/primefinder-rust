@@ -1,9 +1,9 @@
+use num_format::{Locale, ToFormattedString};
 use std::env;
 use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 use std::time::Instant;
-use num_format::{Locale, ToFormattedString};
 
 fn main() {
     let mut primes: Vec<u128> = Vec::new();
@@ -45,9 +45,16 @@ fn main() {
         }
     }
 
-    println!("Total time to find {} primes: {:.2?}", primes.len().to_formatted_string(&Locale::en), before.elapsed());
+    println!(
+        "Total time to find {} primes: {:.2?}",
+        primes.len().to_formatted_string(&Locale::en),
+        before.elapsed()
+    );
     println!("Finished finding primes, writing to file.");
-    let joined: String = primes.iter().map(|&prime| prime.to_string() + "\n").collect();
+    let joined: String = primes
+        .iter()
+        .map(|&prime| prime.to_string() + "\n")
+        .collect();
     match file.write(joined.as_bytes()) {
         Err(why) => panic!("There was an error: `{:?}` writing to file!", why),
         Ok(file) => file,
