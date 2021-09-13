@@ -7,7 +7,6 @@ use num_format::{Locale, ToFormattedString};
 
 fn main() {
     let mut primes: Vec<u64> = Vec::new();
-    let mut current_number_being_checked = 1;
     let mut largest_number_wanted_input_vec: Vec<String> = env::args().collect();
     if largest_number_wanted_input_vec.len() != 2 {
         largest_number_wanted_input_vec.push(1000000.to_string())
@@ -26,10 +25,8 @@ fn main() {
     primes.push(2);
     println!("Finding primes...");
     let before = Instant::now();
-    let m = (n - 2) / 2; // Sieve would normally find numbers below 2n + 2
+    let m: usize = ((largest_number_wanted - 2) / 2) as usize;
     let mut candidates: Vec<bool> = vec![true; m];
-
-    // Cross out some candidates
     for j in 1..m {
         for i in 1..j + 1 {
             let not_prime = i + j + 2 * i * j;
@@ -43,18 +40,16 @@ fn main() {
     // Put primes in list
     for (i, c) in candidates.iter().enumerate() {
         if *c {
-            let prime = 1 + 2 * (i + 1) as i64;
+            let prime = 1 + 2 * (i + 1) as u64;
             primes.push(prime);
         }
     }
 
-    primes
-}
-println!("Total time to find {} primes: {:.2?}", primes.len().to_formatted_string(&Locale::en), before.elapsed());
-println!("Finished finding primes, writing to file.");
-let joined: String = primes.iter().map( | & prime| prime.to_string() + "\n").collect();
-match file.write(joined.as_bytes()) {
-Err(why) => panic ! ("There was an error: `{:?}` writing to file!", why),
-Ok(file) => file,
-};
+    println!("Total time to find {} primes: {:.2?}", primes.len().to_formatted_string(&Locale::en), before.elapsed());
+    println!("Finished finding primes, writing to file.");
+    let joined: String = primes.iter().map(|&prime| prime.to_string() + "\n").collect();
+    match file.write(joined.as_bytes()) {
+        Err(why) => panic!("There was an error: `{:?}` writing to file!", why),
+        Ok(file) => file,
+    };
 }
