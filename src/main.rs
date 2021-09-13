@@ -6,13 +6,13 @@ use std::time::Instant;
 use num_format::{Locale, ToFormattedString};
 
 fn main() {
-    let mut primes: Vec<u64> = Vec::new();
+    let mut primes: Vec<u128> = Vec::new();
     let mut largest_number_wanted_input_vec: Vec<String> = env::args().collect();
     if largest_number_wanted_input_vec.len() != 2 {
         largest_number_wanted_input_vec.push(1000000.to_string())
     }
     let largest_number_wanted_input_string = &largest_number_wanted_input_vec[1];
-    let largest_number_wanted: u64 = match largest_number_wanted_input_string.parse() {
+    let largest_number_wanted: u128 = match largest_number_wanted_input_string.parse() {
         Err(_err) => 100,
         Ok(result) => result,
     };
@@ -40,7 +40,7 @@ fn main() {
     // Put primes in list
     for (i, c) in candidates.iter().enumerate() {
         if *c {
-            let prime = 1 + 2 * (i + 1) as u64;
+            let prime = 1 + 2 * (i + 1) as u128;
             primes.push(prime);
         }
     }
