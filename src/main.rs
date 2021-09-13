@@ -26,22 +26,35 @@ fn main() {
     primes.push(2);
     println!("Finding primes...");
     let before = Instant::now();
-    while current_number_being_checked < largest_number_wanted {
-        current_number_being_checked = current_number_being_checked + 2;
-        for divisor in primes.clone() {
-            if current_number_being_checked % divisor == 0 {
-                break;
-            } else if (divisor as f64) > (current_number_being_checked as f64).sqrt() {
-                primes.push(current_number_being_checked);
+    let m = (n - 2) / 2; // Sieve would normally find numbers below 2n + 2
+    let mut candidates: Vec<bool> = vec![true; m];
+
+    // Cross out some candidates
+    for j in 1..m {
+        for i in 1..j + 1 {
+            let not_prime = i + j + 2 * i * j;
+            if not_prime > m {
                 break;
             }
+            candidates[not_prime - 1] = false;
         }
     }
-    println!("Total time to find {} primes: {:.2?}", primes.len().to_formatted_string(&Locale::en), before.elapsed());
-    println!("Finished finding primes, writing to file.");
-    let joined: String = primes.iter().map(|&prime| prime.to_string() + "\n").collect();
-    match file.write(joined.as_bytes()) {
-        Err(why) => panic!("There was an error: `{:?}` writing to file!", why),
-        Ok(file) => file,
-    };
+
+    // Put primes in list
+    for (i, c) in candidates.iter().enumerate() {
+        if *c {
+            let prime = 1 + 2 * (i + 1) as i64;
+            primes.push(prime);
+        }
+    }
+
+    primes
+}
+println!("Total time to find {} primes: {:.2?}", primes.len().to_formatted_string(&Locale::en), before.elapsed());
+println!("Finished finding primes, writing to file.");
+let joined: String = primes.iter().map( | & prime| prime.to_string() + "\n").collect();
+match file.write(joined.as_bytes()) {
+Err(why) => panic ! ("There was an error: `{:?}` writing to file!", why),
+Ok(file) => file,
+};
 }
