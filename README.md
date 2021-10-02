@@ -7,3 +7,4 @@ To build, run
 git clone https://github.com/randomairborne/primefinder-rust && cd ./primefinder-rust && cargo build --release
 
 ```
+Also has a python version, [primetools](https://github.com/randomairborne/primetools)
